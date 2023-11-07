@@ -1,0 +1,40 @@
+{% extends 'Lwo/driver_list.html' %}
+{% load static %}
+{% block table %}
+  <div class="table-data">
+    <div class="order">
+      <div class="head">
+        <h3>Bajaji Details</h3>
+        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <table id="bajaji-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Bajaji Number</th>
+            <th>Driver name</th>
+            <th>Date Contract</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bajaji in bajajis %}
+          <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{ bajaji.driver.plate_no }}</td>
+            <td>
+              {% if bajaji.driver %}
+              <img src="{{ bajaji.driver.imageURL }}" alt="{{ driver.name }}">
+              <p>{{ bajaji.driver.name }}</p>
+              {% else %}
+              <p>No driver assigned</p>
+              {% endif %}
+            </td>
+            <td>{{ bajaji.driver.start_date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

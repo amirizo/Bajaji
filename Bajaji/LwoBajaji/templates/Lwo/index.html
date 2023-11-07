@@ -1,0 +1,222 @@
+{% extends 'Lwo/base.html' %}
+{% load static %}
+{% block body %}
+   
+        <section id="sidebar">
+            <a href="{% url 'index'%}" class="brand">
+            <i class="fa-solid fa-car"></i>
+            <span class="text">LWOBajaji</span>
+            </a>
+            <ul class="side-menu top">
+            <li class="active">
+                <a href="{% url 'index'%}">
+                <i class="fa-solid fa-house"></i>
+                <span class="text">dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="fa-sharp fa-solid fa-store"></i>
+                <span class="text">My store</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span class="text">Anaylse</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'show_file' %}">
+                    <i class="fa-solid fa-file"></i>
+                    <span class="text">File Link</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="fa-solid fa-people-group"></i>
+                <span class="text">Team</span>
+                </a>
+            </li>
+            </ul>
+            <ul class="side-menu">
+            <li>
+                <a href="#">
+                <i class="fa-solid fa-gear"></i>
+                <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout'%}" class="logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="text">Logout</span>
+                </a>
+            </li>
+            </ul>
+        </section>
+
+        <!----====Content====-->
+        <section id="content">
+            <!---======NAVEBAR-->
+
+            <nav>
+                <i class="fa-solid fa-bars"></i>
+                <a href="#" class="nav-link">Search Your driver</a>
+                <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                </form>
+                <a href="#" class="notifiction">
+                <i class="fa-solid fa-bell"></i>
+                <span class="num">8</span>
+                </a>
+                <p>{{user}}</p>
+                <a href="#" class="profile">
+                <img src="{% static 'images/product-11.jpg'%}" alt="picha ya mtumiaji profile">
+                </a>
+            </nav>
+
+            <!---MAIN-->
+            <main>
+                <div class="head-tittle">
+                    <div class="left">
+                        <h1>Dashboard</h1>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="#">Dashboard</a>
+                            </li>
+                            <li><i class="fa-solid fa-chevron-right"></i></li>
+                            <li>
+                                <a href="{% url 'index'%}" class="active">Home</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <p>Welcome to  dashboard page {{user}}</p>
+                    <a href="#" class="btn-download">
+                        <i class="fa-solid fa-download"></i>
+                        <span class="text">Download PDF</span>
+                    </a>
+                </div>
+                <ul class="box-info">
+                    <li>
+                        <a href="{% url 'driver_list'%}">
+                            <i class="fa-solid fa-person"></i>
+                            <span class="text">
+                                <h3>
+                                    {% with driver_count=drivers|length %}
+                                    {{ driver_count }}
+                                    {% endwith %}
+                                </h3>
+                                <p>The Drivers</p>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'my_store'%}">
+                            <i class="fa-solid fa-store"></i>
+                            <span class="text">
+                                <h3>{{ total_bajaji }}</h3>
+                                <p>My Store</p>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'payment' %}">
+                            <i class="fa-sharp fa-solid fa-credit-card"></i>
+                            <span class="text">
+                                <h3>?</h3>
+                                <p>The Payment Stutus</p>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-money-bill"></i>
+                        <span class="text">
+                            <h3>{{ total_income }} Tsh.</h3>
+                            <p>INCOME</p>
+                        </span>   
+                    </li>
+                    <li>
+                        <a href="{% url 'unknown_driver' %}">
+                            <i class="fa-solid fa-question"></i>
+                            <span class="text">
+                                <h3>{{ total_unknown_drivers }}</h3>
+                                <p>unknown Driver</p>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="table-data">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Recent Drivers</h3>
+                            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Driver's name</th>
+                                    <th>Date Payment</th>
+                                    <th>Stutus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img src="{% static 'images/product-11.jpg' %}">
+                                        <p>Amir Mussa</p>
+                                    </td>
+                                    <td>26/09/2023</td>
+                                    <td><span class="stutus not-paid">Process</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="{% static 'images/product-11.jpg' %}">
+                                        <p>Mbarak</p>
+                                    </td>
+                                    <td>26/04/2023</td>
+                                    <td><span class="stutus paid-day">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="{% static 'images/product-11.jpg' %}">
+                                        <p>Shinuna</p>
+                                    </td>
+                                    <td>23/10/2023</td>
+                                    <td><span class="stutus paid-month">Padding</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="todo">
+                        <div class="head">
+                            <h3>Recent Drivers</h3>
+                            <a href="#"><i class="fa-solid fa-plus"></i></a>
+                            <i class="fa-solid fa-bars-filter"></i>
+                        </div>
+                        <ul class="todo-list">
+                            <li class="completed">
+                                <p>Todo List</p>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </li>
+                            <li class="completed">
+                                <p>Todo List</p>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </li>
+                            <li class="not-completed">
+                                <p>Todo List</p>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+            <!---MAIN-->
+        </section>
+
+<!------========CONTENT======-->
+{% endblock %}

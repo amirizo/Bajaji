@@ -1,0 +1,73 @@
+{% extends 'Lwo/driver_list.html' %}
+{% load static %}
+{% block table %}
+    {% if not drivers %}
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>UNKNOWN PAYMENT</h3>
+                <form method="POST" class="form_control2" id="unknown_driver_form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{form.name}}
+                    </div>
+                    <div class="form-group">
+                        {{form.phone}}
+                    </div>
+                    <div class="form-group">
+                        {{form.phone11}}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Tuma Malipo</button>
+                    </div>
+                </form>
+                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NO</th>
+                        <th>DRIVER</th>
+                        <th>PAYMENT DATE</th>
+                        <th>SERVICE</th>
+                        <th>RECEIVE FROM</th>
+                        <th>TX_ID</th>
+                        <th>AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for driver in unknown_drivers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ driver.name }}</td>
+                        <td>{{ driver.payment_date }}</td>
+                        <td>{{ driver.transaction_type }}</td>
+                        <td>{{ driver.received_from }}</td>
+                        <td>{{ driver.txn_id }}</td>
+                        <td>{{ driver.amount }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">Hakuna data ya Unknown payment.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <p>Hakuna Unknown Drivers payment yaliopatikana.</p>
+    {% endif %}
+
+    <script>
+        var form_fields = document.getElementsByTagName('input')
+        form_fields[2].placeholder='Drive Name...';
+        form_fields[3].placeholder='Phone Number...';
+        form_fields[4].placeholder='Payment Number... ...';
+
+        for(var field in form_fields){
+            form_fields[field].className += 'form_control2'
+        }
+    </script>
+        
+{% endblock %}

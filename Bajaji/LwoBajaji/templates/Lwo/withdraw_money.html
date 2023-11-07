@@ -1,0 +1,18 @@
+{% extends 'Lwo/driver_list.html' %}
+{% load static %}
+{% block table %}
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+            </div>
+            <div class="container_2">
+                <h1>Withdraw Money</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Withdraw</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

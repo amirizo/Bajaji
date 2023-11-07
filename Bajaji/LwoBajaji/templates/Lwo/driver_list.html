@@ -1,0 +1,515 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css'%}">
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + '=') {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+<body>
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class="fa-solid fa-car"></i>
+            <span class="text">LWOBajaji</span>
+        </a>
+        <ul class="side-menu top">
+            <li class="active">
+                <a href="{% url 'index'%}">
+                <i class="fa-solid fa-house"></i>
+                <span class="text">dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="fa-sharp fa-solid fa-store"></i>
+                <span class="text">My store</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span class="text">Anaylse</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'show_file' %}">
+                    <i class="fa-solid fa-file"></i>
+                    <span class="text">File Link</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span class="text">Team</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#">
+                <i class="fa-solid fa-gear"></i>
+                <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout'%}" class="logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class="fa-solid fa-bars"></i>
+            <a href="#" class="nav-link">Search Your driver</a>
+            <form action="#">
+            <div class="form-input">
+                <input type="search" placeholder="Search...">
+                <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            </form>
+            <a href="#" class="notifiction">
+            <i class="fa-solid fa-bell"></i>
+            <span class="num">8</span>
+            </a>
+            <p>{{user}}</p>
+            
+            <a href="{% url 'withdraw_money' %}" class="profile">
+                <i class="fa-sharp fa-solid fa-money-bill-transfer"></i>
+                <span class="text">
+                    <h3>Cash Out</h3>
+                </span>
+            </a>
+            
+        </nav>
+
+        <!---MAIN-->
+        <main>
+            <div class="head-tittle">
+                <div class="left">
+                    <h1>Dashboard</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li><i class="fa-solid fa-chevron-right"></i></li>
+                        <li>
+                            <a href="{% url 'index'%}" class="active">Home</a>
+                        </li>
+                    </ul>
+                </div>
+                <p>Welcome to  dashboard page {{user}}</p>
+                <a href="#" class="btn-download">
+                    <i class="fa-solid fa-download"></i>
+                    <span class="text">Download PDF</span>
+                </a>
+            </div>
+            <ul class="box-info">
+                <li>
+                    <a href="{% url 'driver_list'%}">
+                        <i class="fa-solid fa-person"></i>
+                        <span class="text">
+                            <h3>
+                                {{ total_drivers }}
+                            </h3>
+                            <p>The Drivers</p>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'my_store'%}">
+                        <i class="fa-solid fa-store"></i>
+                        <span class="text">
+                            <h3>{{ total_bajaji }}</h3>
+                            <p>My Store</p>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'payment' %}">
+                        <i class="fa-sharp fa-solid fa-credit-card"></i>
+                        <span class="text">
+                            <h3>?</h3>
+                            <p>The Payment Stutus</p>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                   <i class="fa-solid fa-money-bill"></i>
+                        <span class="text">
+                            <h3>{{ total_income }}  Tsh.</h3>
+                            <p>INCOME</p>
+                        </span>   
+                </li>
+                <li>
+                    <i class="fa-solid fa-wallet"></i>
+                    <span class="text">
+                        <h3>{{ total_amount_received|floatformat:2}}   Tsh.</h3>
+                        <p>MY WALLET</p>
+                    </span>   
+                </li>
+                <li>
+                    <a href="{% url 'unknown_driver' %}">
+                        <i class="fa-solid fa-question"></i>
+                        <span class="text">
+                            <h3>{{ total_unknown_drivers }}</h3>
+                            <p>unknown Driver</p>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            {% block table %}
+            <div class="table-data">
+                <div class="order">   
+                    <div class="head">
+                        <h3>The Driver List</h3>
+                        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        <div class="adMembersBtn">
+                            <button id="show-modal-button">New Member</button>
+                        </div>
+                    </div>
+                    <table id="driver-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Driver's name</th>
+                                <th>Phone Number </th>
+                                <th>Start Date</th>
+                                <th>Finish Date</th>
+                                <th>Phone NumberII</th>
+                                <th>Plate Number</th>
+                                <th>Sponser</th>
+                                <th>Address</th>
+                                <th>Action</th>
+                                <th>Stutus</th>
+                            </tr>
+                        </thead>
+                        <tbody class="userInfo">
+                            {% for driver in drivers %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <img src="{{ driver.imageURL }}" alt="{{ driver.name }}">
+                                    <p>{{ driver.name }}</p>
+                                </td>
+                                <td>{{ driver.phone }}</td>
+                                <td>{{ driver.start_date }}</td>
+                                <td>{{ driver.finish_date }}</td>
+                                <td>{{driver.phoneII}}</td>
+                                <td>{{driver.plate_no}}</td>
+                                <td>{{driver.sponsor}}</td>
+                                <td>{{driver.address}}</td>
+                                <td>
+                                    <button class="edit-btn" data-driverid="{{ driver.id }}"><i class="fa-solid fa-eye"></i></button>
+                                    <button class="del-btn"  data-driverid="{{ driver.id }}"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                                <td><span class="stutus not-paid {% if driver.payment_status == 'not-paid' %}not-paid{% elif driver.payment_status == 'paid-day' %}paid-day{% elif driver.payment_status == 'paid-week' %}paid-week{% endif %}" id="{{ driver.name }}">{{driver.status_payment}}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="empty" style="text-align: center;">No driver added</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                
+            <div class="dark_bg">
+                <div class="popup">
+                    <header>
+                        <h2 class="modalTittle">Add Driver</h2>
+                        <button class="closeBtn"><i class="fa-solid fa-x"></i></button>
+                    </header>
+
+                    <div class="body">
+                        <form id="myForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="imgholder">
+                                <label for="upoadimg" class="upload">
+                                    <input type="file" id="image" name="image" class="picture">
+                                    <i class="fa-solid fa-plus"></i>
+                                </label>
+                                <img src="{% static 'images/avatar.png' %}" id="modal-image" width="150" height="150" class="img">
+                            </div>
+
+                            <div class="InputFieldContainer">
+                                <div class="nameField">
+                                    <div class="form_role">
+                                        <label for="name">Name</label>
+                                        <input type="text" id="name" name="name" placeholder="Driver Name..." required>
+                                    </div>
+                                    <div class="form_role">
+                                        <label for="Phone1">Phone</label>
+                                        <input type="number" id="phone" name="phone" placeholder="Phone Number..." required>
+                                    </div>
+                                </div>
+                                <div class="ageField">
+                                    <div class="form_role">
+                                        <label for="start_date">Start Date:</label>
+                                        <input type="date" id="start_date" name="start_date" placeholder="Start Date..." required>
+                                    </div>
+                                    <div class="form_role">
+                                        <label for="finish_date">Finish Date:</label>
+                                        <input type="date" id="finish_date" name="finish_date" placeholder="Finish Date..." required>
+                                    </div>
+                                </div>
+                                <div class="postSalary">
+                                    <div class="form_role">
+                                        <label for="Phone2">PhoneII</label>
+                                        <input type="number" id="phone2" name="phone2" placeholder="Phone NumberII..." required>
+                                    </div>
+                                    <div class="form_role">
+                                        <label for="plate_no">Plate No:</label>
+                                        <input type="text" id="plate_no" name="plate_no" placeholder="Enter Plate No..." required>
+                                    </div>
+                                </div>
+
+                                <div class="form_role">
+                                    <label for="address">Address:</label>
+                                    <input type="text" id="address" name="address" placeholder="Makaazi..." required>
+                                </div>
+                                <div class="form_role">
+                                    <label for="text">Mdhamini:</label>
+                                    <input type="text" id="text" name="text" placeholder="Mdhamini..." required>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <footer class="popinFooter">
+                        <button form="myForm" class="submitBtn">Add Driver</button>
+                        <button type="submit" disabled="disabled" id="update-btn" style="background-color: red;" class="closeBtn">Update</button>
+                    </footer>
+                </div>
+            </div> 
+            
+            <script>
+                var newMemberBtn = document.querySelector('.adMembersBtn');
+                var form = document.querySelector('form');
+                var submitBtn = document.querySelector('.submitBtn');
+                var popinForm = document.querySelector('.popup');
+                var nameEl = document.getElementById('name');
+                var phoneEl = document.getElementById('phone');
+                var startEl = document.getElementById('start_date');
+                var finishEl = document.getElementById('finish_date');
+                var phoneIIEl = document.getElementById('phone2');
+                var plateEl = document.getElementById('plate_no');
+                var sponsorEl = document.getElementById('text');
+                var addressEl = document.getElementById('address');
+                var allEdit = document.querySelectorAll(".edit-btn");
+                var updateButton = document.getElementById("update-btn");
+                var addDriverButton = document.querySelector(".submitBtn");
+                var closeBtn = document.querySelector('.closeBtn')
+
+                closeBtn.addEventListener('click', ()=> {
+                    darkBg.style.display = "none"
+                    popinForm.style.display = "none"
+                    form.reset()
+                    var i;
+                    for(i=0; i<allinput.length; i++){
+                        allinput[i].value = "";
+                    }
+                })
+                
+                                            
+                newMemberBtn.addEventListener('click', () => {
+                    nameEl.value = "";
+                    phoneEl.value = "";
+                    startEl.value = "";
+                    finishEl.value = "";
+                    phoneIIEl.value = "";
+                    plateEl.value = "";
+                    sponsorEl.value = ""; 
+                    addressEl.value = "";
+
+                    submitBtn.innerHTML = "Add Driver";
+                    modalTittle.innerHTML = "Add Driver"
+                    popinFooter.style.display = "block"
+                    darkBg.style.display = "block"
+                    popinForm.style.display = "block"
+
+                    addDriverButton.disabled = false;
+                    updateButton.disabled = true;
+                })
+
+
+                document.getElementById('myForm').addEventListener('submit', function (e){
+                    e.preventDefault()
+
+                    const formData = new FormData();
+                    formData.append('name', document.querySelector('input[name="name"]').value);
+                    formData.append('phone', document.querySelector('input[name="phone"]').value);
+                    formData.append('start_date', document.querySelector('input[name="start_date"]').value);
+                    formData.append('finish_date', document.querySelector('input[name="finish_date"]').value);
+                    formData.append('plate_no', document.querySelector('input[name="plate_no"]').value);
+                    formData.append('address', document.querySelector('input[name="address"]').value);
+                    formData.append('text', document.querySelector('input[name="text"]').value);
+                    formData.append('phone2', document.querySelector('input[name="phone2"]').value);
+                    
+
+                    
+                    const imageInput = document.querySelector('input[name="image"]');
+                    const image = imageInput.files[0];
+                    formData.append('image', image);
+
+                    fetch('/add_driver_form', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert('Driver added successfully');
+                        window.location.href = "{% url 'driver_list' %}";
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+
+
+                    darkBg.style.display = "block"
+                    popinForm.style.display = "block"
+                    form.reset()
+
+
+                  
+
+                });
+                
+                for(i=0; i<allEdit.length; i++){
+                    allEdit[i].onclick = function() {
+                        var driverId = this.dataset.driverid
+                        var tr = this.parentElement.parentElement;
+                        var td = tr.getElementsByTagName("TD");
+                        var name = td[1].querySelector("p").textContent;
+                        var phone = td[2].innerHTML;
+                        var start_date = td[3].innerHTML;
+                        var finish_date = td[4].innerHTML;
+                        var phone11 = td[5].innerHTML;
+                        var plate_no = td[6].innerHTML;
+                        var sponsor = td[7].innerHTML;
+                        var address = td[8].innerHTML;
+
+
+                       
+                        const imageInput = document.querySelector('input[name="image"]');
+                        const image = imageInput.files[0]
+                        
+                        var imageURL = td[1].querySelector("img").getAttribute("src");
+                        var driverImage = document.getElementById("modal-image");
+                        driverImage.src = imageURL;
+
+                        newMemberBtn.click();
+                        addDriverButton.disabled = true;
+                        updateButton.disabled = false;
+                        darkBg.style.display = "block"
+                        popinForm.style.display = "block"
+                        popinFooter.style.display = "block"
+                            
+                        nameEl.value = name;
+                        phoneEl.value = phone;
+                        startEl.value = start_date;
+                        finishEl.value = finish_date;
+                        phoneIIEl.value = phone11;
+                        plateEl.value = plate_no;
+                        sponsorEl.value = sponsor;
+                        addressEl.value = address,
+                        driverImage.src = imageURL,
+
+                      
+
+                        updateButton.onclick = function (e) {
+                            e.preventDefault();
+                            updateButton.disabled = true;
+
+                            console.log('driverId:', driverId);
+
+                            
+
+                            var updatedData = {
+                                name: nameEl.value,
+                                phone: phoneEl.value,
+                                start_date: startEl.value,
+                                finish_date: finishEl.value,
+                                phone2: phoneIIEl.value,
+                                plate_no: plateEl.value,
+                                text: sponsorEl.value,
+                                address: addressEl.value,
+                                imageURL: driverImage.src,
+
+                                driverId: driverId 
+                            };
+                            var imageInput = document.querySelector('input[name="image"]');
+                            var image = imageInput.files[0];
+                            var updatedData = new FormData();
+
+                            if (image) {
+                                updatedData.append('image', image);
+                            }
+                            const url = `/update_driver?driverId=${driverId}&name=${nameEl.value}&phone=${phoneEl.value}&start_date=${startEl.value}&finish_date=${finishEl.value}&phone2=${phoneIIEl.value}&plate_no=${plateEl.value}&text=${sponsorEl.value}&address=${addressEl.value}&image=${image}`;
+
+                            fetch(url,{
+                                method: 'POST',
+                                body: JSON.stringify(updatedData),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': getCookie('csrftoken'),
+                                },
+                            })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                alert('Driver updated successfully');
+                                window.location.href = "{% url 'driver_list' %}";
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+
+                        };
+
+   
+                    }
+
+                }
+
+                const imageInput = document.getElementById('image');
+                const modalImage = document.getElementById('modal-image');
+                imageInput.addEventListener('change', function () {
+                    const image = imageInput.files[0];
+                    if (image) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const base64Image = e.target.result;
+                            modalImage.src = base64Image;
+                        };
+                        reader.readAsDataURL(image);
+                    }
+                });
+
+            </script>
+
+            {% endblock %}
+        </main>
+    </section>
+  
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="https://kit.fontawesome.com/86ef79cc68.js" crossorigin="anonymous"></script>
+
+</body>
